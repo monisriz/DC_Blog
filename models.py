@@ -41,5 +41,8 @@ class Comment (BaseModel):
     created = peewee.DateTimeField(
         default=datetime.datetime.utcnow)
 
+    def html (self):
+        return markdown2.markdown(self.body)
+
     def __str__ (self):
         return self.comment_text
