@@ -3,7 +3,6 @@ import tornado.ioloop
 import tornado.web
 import tornado.log
 
-
 from jinja2 import \
   Environment, PackageLoader, select_autoescape
 
@@ -22,9 +21,9 @@ class TemplateHandler(tornado.web.RequestHandler):
 class MainHandler(TemplateHandler):
     def get(self):
         posts = BlogPost.select().order_by(BlogPost.created.desc())
+        self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
 
         self.render_template("home.html", {'posts': posts})
-
 
 class PostHandler(TemplateHandler):
     def get (self, slug):
@@ -34,17 +33,15 @@ class PostHandler(TemplateHandler):
         self.render_template("post.html", {'post': post, 'comments': comments})
 
 class CommentHandler(TemplateHandler):
-    def post (self, slug):
+    def post (self):
         comment_text = self.get_body_argument('comment_text')
+
         post = BlogPost.select().where(BlogPost.slug == slug).get()
-        # comment = Comment.select().where(blogpost_id == BlogPost.id).get()
-        # comment.comment_text = comment_text
+        Comment.create(blogpost_id = post.id, comment_text = comment_text).save()
+        # comment.save()
+        self.redirect('/post/{}'.format(slug))
 
-        comment = Comment.create(blogpost_id=BlogPost.id, comment_text=comment_text)
-        comment.save()
 
-        # self.render_template("comment.html", {'post': post, 'comment_text': comment_text})
-        self.redirect('/post/' + slug)
 
 def make_app():
     return tornado.web.Application([

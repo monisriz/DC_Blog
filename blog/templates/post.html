@@ -1,31 +1,42 @@
-<h1>{{ post.title }}</h1>
-<div class="content">
-  {{ post.html()|safe }}
-</div>
-<div class="created">
-  {{ post.created }}
-</div>
-<div class="author">
-  <a href="https://twitter.com/{{ post.author.twitter }}">
-    Twitter:  {{ post.author.name }}
-  </a>
-</div>
-<div>
-  <form action="/post/{{ post.slug }}/comment" method="post">
-    <textarea name="comment_text"></textarea>
-    <br>
-    <button type="submit">Post Comment</button>
-  </form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Posts</title>
+  </head>
+  <body>
 
-<h2>Comments:</h2>
-<ul>
-  {% for comment in comments %}
-    {% if post.id == comment.blogpost_id %}
-  <li>
-      {{ comment.comment_text }}
-  </li>
-    {% endif %}
-  {% endfor %}
-</ul>
+    <h1>{{ post.title }}</h1>
+    <div class="content">
+      {{ post.html()|safe }}
+    </div>
+    <div class="created">
+      {{ post.created }}
+    </div>
+    <div class="author">
+      <a href="https://twitter.com/{{ post.author.twitter }}">
+        Twitter:  {{ post.author.name }}
+      </a>
+    </div>
+    <div>
+      <form action="/post/{{ post.slug }}/comment" method="post">
+        <textarea name="comment_text"></textarea>
+        <br>
+        <button type="submit">Post Comment</button>
+      </form>
 
-</div>
+    <h2>Comments:</h2>
+    <ul>
+      {% for comment in comments %}
+        {% if post.id == comment.blogpost_id %}
+      <li>
+          {{ comment.comment_text }}
+      </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    </div>
+
+  </body>
+</html>

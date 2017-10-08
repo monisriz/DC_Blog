@@ -6,7 +6,7 @@ from playhouse.db_url import connect
 DB = connect(
   os.environ.get(
     'DATABASE_URL',
-    'postgres://postgres:postgres@localhost:5432/blog'
+    'postgres://localhost:5432/blog'
   )
 )
 class BaseModel (peewee.Model):
