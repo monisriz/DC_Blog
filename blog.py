@@ -28,7 +28,7 @@ class MainHandler(TemplateHandler):
 class PostHandler(TemplateHandler):
     def get (self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
-        self.render_template("post.html", {'post': post, 'comments': comments})
+        self.render_template("post.html", {'post': post})
 
 class CommentHandler(TemplateHandler):
     def post (self, slug):
@@ -55,7 +55,7 @@ def make_app():
         (r"/", MainHandler),
         (r"/post/(.*)/comment", CommentHandler),
         (r"/post/(.*)", PostHandler),
-        (r"/authors/(.*)", AuthorHandler),
+        (r"/author/(.*)", AuthorHandler),
         (r"/static/(.*)",
             tornado.web.StaticFileHandler, {'path': 'static'}),
     ], autoreload=True)
