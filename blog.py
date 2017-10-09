@@ -33,7 +33,7 @@ class PostHandler(TemplateHandler):
         self.render_template("post.html", {'post': post, 'comments': comments})
 
 class CommentHandler(TemplateHandler):
-    def post (self):
+    def post (self, slug):
         comment_text = self.get_body_argument('comment_text')
 
         post = BlogPost.select().where(BlogPost.slug == slug).get()
@@ -46,8 +46,8 @@ class CommentHandler(TemplateHandler):
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
-        (r"/post/(.*)", PostHandler),
         (r"/post/(.*)/comment", CommentHandler),
+        (r"/post/(.*)", PostHandler),
         (r"/static/(.*)",
             tornado.web.StaticFileHandler, {'path': 'static'}),
     ], autoreload=True)
