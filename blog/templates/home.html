@@ -5,13 +5,19 @@
     <title>Blog</title>
   </head>
   <body>
+    <ul>
     {% for post in posts %}
     <li>
       <a href="/post/{{ post.slug }}">
         {{ post.title }}
       </a>
+      -
+      <a href="/authors/{{ post.author.name }}">{{ post.author.name }}</a>
+      
+      <!-- {{ count }} -->
     </li>
+
     {% endfor %}
   </ul>
   </body>
-</html><ul>
+</html>

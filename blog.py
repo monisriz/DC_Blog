@@ -20,34 +20,42 @@ class TemplateHandler(tornado.web.RequestHandler):
 
 class MainHandler(TemplateHandler):
     def get(self):
-        posts = BlogPost.select().order_by(BlogPost.created.desc())
-        self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
-
+        posts = BlogPost.select().join(Author).order_by(BlogPost.created.desc())
+        self.set_header('Cache-Control',
+                        'no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("home.html", {'posts': posts})
 
 class PostHandler(TemplateHandler):
     def get (self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
-        comments = Comment.select().order_by(Comment.created.desc())
-
         self.render_template("post.html", {'post': post, 'comments': comments})
 
 class CommentHandler(TemplateHandler):
     def post (self, slug):
         comment_text = self.get_body_argument('comment_text')
+        comment_author = self.get_body_argument('comment_author')
+        comment_email = self.get_body_argument('comment_email')
 
         post = BlogPost.select().where(BlogPost.slug == slug).get()
-        Comment.create(blogpost_id = post.id, comment_text = comment_text).save()
-        # comment.save()
+        comment = Comment.create(blogpost_id = post.id,
+                                comment_text = comment_text,
+                                comment_author = comment_author,
+                                comment_email = comment_email)
+        comment.save()
         self.redirect('/post/{}'.format(slug))
 
+class AuthorHandler(TemplateHandler):
+    def get (self, name):
+        author = Author.select().where(Author.name == name).get()
 
+        self.render_template("author.html", {'author': author})
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/post/(.*)/comment", CommentHandler),
         (r"/post/(.*)", PostHandler),
+        (r"/authors/(.*)", AuthorHandler),
         (r"/static/(.*)",
             tornado.web.StaticFileHandler, {'path': 'static'}),
     ], autoreload=True)

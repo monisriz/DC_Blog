@@ -36,7 +36,8 @@ class BlogPost (BaseModel):
 
 class Comment (BaseModel):
     blogpost = peewee.ForeignKeyField(BlogPost, null=True)
-
+    comment_author = peewee.CharField(max_length=60)
+    comment_email = peewee.CharField(max_length=60)
     comment_text = peewee.TextField()
     created = peewee.DateTimeField(
         default=datetime.datetime.utcnow)
