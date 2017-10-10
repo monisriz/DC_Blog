@@ -21,7 +21,7 @@ class Author (BaseModel):
 
 class BlogPost (BaseModel):
     author = peewee.ForeignKeyField(Author, null=True)
-
+    category = peewee.CharField(max_length=20)
     title = peewee.CharField(max_length=60)
     slug = peewee.CharField(max_length=50, unique=True)
     body = peewee.TextField()
