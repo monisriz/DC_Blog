@@ -50,12 +50,19 @@ class AuthorHandler(TemplateHandler):
 
         self.render_template("author.html", {'author': author})
 
+class AllAuthors(TemplateHandler):
+    def get (self):
+        authors = Author.select()
+
+        self.render_template("authors.html", {'authors': authors})
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/post/(.*)/comment", CommentHandler),
         (r"/post/(.*)", PostHandler),
         (r"/author/(.*)", AuthorHandler),
+        (r"/authors", AllAuthors),
         (r"/static/(.*)",
             tornado.web.StaticFileHandler, {'path': 'static'}),
     ], autoreload=True)
