@@ -68,6 +68,10 @@ class CategoryHandler(TemplateHandler):
 
         self.render_template("category.html", {'posts': posts})
 
+class LoginHandler(TemplateHandler):
+    def get (self):
+        self.render_template("login.html", {'name': 'name'})
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
@@ -77,6 +81,7 @@ def make_app():
         (r"/authors", AllAuthors),
         (r"/cat", AllCategories),
         (r"/cat/(.*)", CategoryHandler),
+        (r"/login", LoginHandler),
         (r"/static/(.*)",
             tornado.web.StaticFileHandler, {'path': 'static'}),
     ], autoreload=True)

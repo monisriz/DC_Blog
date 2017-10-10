@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>All Authors</title>
-  </head>
-  <body>
-  <h2>  All our authors </h2>
+{% extends "base.html" %}
+
+
+{% block content %}
 <ul>
   {% for author in authors %}
 
@@ -16,5 +12,4 @@
 
   {% endfor %}
 </ul>
-  </body>
-</html>
+{% endblock %}
