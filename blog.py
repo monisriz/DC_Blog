@@ -56,6 +56,18 @@ class AllAuthors(TemplateHandler):
 
         self.render_template("authors.html", {'authors': authors})
 
+class AllCategories(TemplateHandler):
+    def get (self):
+        cats = BlogPost.select(BlogPost.category).distinct().order_by(BlogPost.category)
+
+        self.render_template("categories.html", {'cats': cats})
+
+class CategoryHandler(TemplateHandler):
+    def get (self, category):
+        posts = BlogPost.select().where(BlogPost.category == category)
+
+        self.render_template("category.html", {'posts': posts})
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
@@ -63,6 +75,8 @@ def make_app():
         (r"/post/(.*)", PostHandler),
         (r"/author/(.*)", AuthorHandler),
         (r"/authors", AllAuthors),
+        (r"/cat", AllCategories),
+        (r"/cat/(.*)", CategoryHandler),
         (r"/static/(.*)",
             tornado.web.StaticFileHandler, {'path': 'static'}),
     ], autoreload=True)
