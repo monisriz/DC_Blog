@@ -9,6 +9,7 @@
   <body>
 
     <h1>{{ post.title }}</h1>
+    <h3><em><a href="/author/{{ post.author.name }}">{{ post.author.name }}</a></em></h3>
     <div class="content">
       {{ post.html()|safe }}
     </div>
